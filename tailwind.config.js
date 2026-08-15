@@ -23,7 +23,7 @@ module.exports = {
         muted: '#e9efeb', // 비활성 배경
       },
       border: {
-        DEFAULT: '#e3eae5',
+        DEFAULT: '#dfdfdf',
         strong: '#bccac3', // 강조
       },
       danger: '#f30707',
