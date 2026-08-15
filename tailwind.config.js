@@ -22,6 +22,7 @@ module.exports = {
         DEFAULT: '#ffffff',
         subtle: '#eff5f1', // 섹션 구분용
         muted: '#e9efeb', // 비활성 배경
+        circle: '#f5f5f5', // 아바타 플레이스홀더 배경
       },
       border: {
         DEFAULT: '#dfdfdf',
