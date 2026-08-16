@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useRouter, usePathname, type Href } from 'expo-router';
+import { usePathname, useRouter, type Href } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
@@ -48,7 +48,7 @@ const TAB_PATHS: Record<TabKey, string> = {
 
 // 활성 탭 여부에 따른 라벨 텍스트 스타일 변형
 const label = tv({
-  base: 'w-[44px] text-center font-semibold text-micro',
+  base: 'w-[44px] text-center font-semibold text-[9px]',
   variants: {
     active: {
       true: 'text-primary', // 활성
@@ -72,7 +72,7 @@ export function BottomNav() {
             <Pressable
               key={tab.key}
               onPress={() => router.push(TAB_ROUTES[tab.key])}
-              className="w-[44px] items-center gap-4"
+              className="flex-1 items-center gap-4"
             >
               {/* tintColor는 className으로 제어 불가 → 활성 상태에 따라 직접 색상 지정 */}
               <Image
