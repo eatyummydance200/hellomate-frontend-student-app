@@ -25,16 +25,6 @@ const COMMUNITY_MENU: MenuRow[] = [
   { label: '내가 작성한 댓글', route: '/mypage/comments' },
 ];
 
-type TabKey = 'notice' | 'community' | 'club' | 'info' | 'mypage';
-
-const TAB_ROUTES: Record<TabKey, Href> = {
-  notice: '/(tabs)',
-  community: '/(tabs)/community',
-  club: '/(tabs)/club',
-  info: '/(tabs)/info',
-  mypage: '/(tabs)/mypage',
-};
-
 export default function MyPageScreen() {
   const router = useRouter();
 
@@ -107,7 +97,7 @@ export default function MyPageScreen() {
         </Pressable>
       </ScrollView>
 
-      <BottomNav active="mypage" onChange={(key: TabKey) => router.push(TAB_ROUTES[key])} />
+      <BottomNav />
     </View>
   );
 }

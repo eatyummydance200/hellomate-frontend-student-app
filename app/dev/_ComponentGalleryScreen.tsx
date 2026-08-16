@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Avatar } from '@/src/components/Avatar';
@@ -34,8 +33,6 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export function ComponentGalleryScreen() {
-  const [activeTab, setActiveTab] = useState<'notice' | 'community' | 'club' | 'info' | 'mypage'>('community');
-
   return (
     <ScrollView className="flex-1 bg-background" contentContainerClassName="pb-40">
       <Section title="Text">
@@ -107,7 +104,7 @@ export function ComponentGalleryScreen() {
       </Section>
 
       <Section title="BottomNav">
-        <BottomNav active={activeTab} onChange={setActiveTab} />
+        <BottomNav />
       </Section>
     </ScrollView>
   );

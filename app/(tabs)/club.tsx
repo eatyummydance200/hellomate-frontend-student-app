@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useRouter, type Href } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, TextInput, View } from 'react-native';
 import { Text } from '@/src/components/Text';
@@ -59,16 +59,6 @@ const STATUS_BADGE = {
   joined: { label: '참여 중', className: 'bg-primary/10', textClassName: 'text-primary' },
   closed: { label: '마감', className: 'bg-[#d5dbd7]', textClassName: 'text-text' },
 } as const;
-
-type TabKey = 'notice' | 'community' | 'club' | 'info' | 'mypage';
-
-const TAB_ROUTES: Record<TabKey, Href> = {
-  notice: '/(tabs)',
-  community: '/(tabs)/community',
-  club: '/(tabs)/club',
-  info: '/(tabs)/info',
-  mypage: '/(tabs)/mypage',
-};
 
 export default function ClubHomeScreen() {
   const router = useRouter();
@@ -276,7 +266,7 @@ export default function ClubHomeScreen() {
         </ScrollView>
       )}
 
-      <BottomNav active="club" onChange={(key: TabKey) => router.push(TAB_ROUTES[key])} />
+      <BottomNav />
     </View>
   );
 }

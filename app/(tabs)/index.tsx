@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useRouter, type Href } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/src/components/Text';
 import { BottomNav } from '@/src/components/layout/BottomNav';
@@ -43,16 +43,6 @@ const RECENT_NOTICES = [
     read: true,
   },
 ] as const;
-
-type TabKey = 'notice' | 'community' | 'club' | 'info' | 'mypage';
-
-const TAB_ROUTES: Record<TabKey, Href> = {
-  notice: '/(tabs)',
-  community: '/(tabs)/community',
-  club: '/(tabs)/club',
-  info: '/(tabs)/info',
-  mypage: '/(tabs)/mypage',
-};
 
 export default function NoticeHomeScreen() {
   const router = useRouter();
@@ -146,10 +136,7 @@ export default function NoticeHomeScreen() {
         </View>
       </ScrollView>
 
-      <BottomNav
-        active="notice"
-        onChange={(key: TabKey) => router.push(TAB_ROUTES[key])}
-      />
+      <BottomNav />
     </View>
   );
 }

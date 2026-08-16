@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useRouter, type Href } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, TextInput, View } from 'react-native';
 import { Text } from '@/src/components/Text';
 import { BottomNav } from '@/src/components/layout/BottomNav';
@@ -46,16 +46,6 @@ const POSTS = [
     comments: 2,
   },
 ] as const;
-
-type TabKey = 'notice' | 'community' | 'club' | 'info' | 'mypage';
-
-const TAB_ROUTES: Record<TabKey, Href> = {
-  notice: '/(tabs)',
-  community: '/(tabs)/community',
-  club: '/(tabs)/club',
-  info: '/(tabs)/info',
-  mypage: '/(tabs)/mypage',
-};
 
 export default function CommunityHomeScreen() {
   const router = useRouter();
@@ -144,7 +134,7 @@ export default function CommunityHomeScreen() {
         <Image source={pencilIcon} style={{ width: 21, height: 21 }} />
       </Pressable>
 
-      <BottomNav active="community" onChange={(key: TabKey) => router.push(TAB_ROUTES[key])} />
+      <BottomNav />
     </View>
   );
 }

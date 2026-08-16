@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useRouter, type Href } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/src/components/Text';
 import { BottomNav } from '@/src/components/layout/BottomNav';
@@ -21,16 +21,6 @@ const ARTICLES = [
   { id: 'i4', title: '유학생을 위한 취업 준비 가이드', date: '2024.10.28', views: 1000 },
   { id: 'i5', title: '한국어 학습을 위한 추천 자료', date: '2024.10.30', views: 600 },
 ] as const;
-
-type TabKey = 'notice' | 'community' | 'club' | 'info' | 'mypage';
-
-const TAB_ROUTES: Record<TabKey, Href> = {
-  notice: '/(tabs)',
-  community: '/(tabs)/community',
-  club: '/(tabs)/club',
-  info: '/(tabs)/info',
-  mypage: '/(tabs)/mypage',
-};
 
 export default function InfoHomeScreen() {
   const router = useRouter();
@@ -104,7 +94,7 @@ export default function InfoHomeScreen() {
         </View>
       </ScrollView>
 
-      <BottomNav active="info" onChange={(key: TabKey) => router.push(TAB_ROUTES[key])} />
+      <BottomNav />
     </View>
   );
 }
