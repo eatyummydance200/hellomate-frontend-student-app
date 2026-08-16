@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Avatar } from '@/src/components/Avatar';
 import { Text } from '@/src/components/Text';
 
@@ -43,10 +44,14 @@ const MESSAGES: Message[] = [
 
 export default function NoticeContactScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
     <View className="flex-1 bg-background-subtle">
-      <View className="flex-row items-center justify-between border-b border-border bg-background px-[17px] py-[13px]">
+      <View
+        className="flex-row items-center justify-between border-b border-border bg-background px-[17px] pb-[13px]"
+        style={{ paddingTop: insets.top + 13 }}
+      >
         <View className="flex-row items-center gap-12">
           <Avatar size="sm" />
           <View>

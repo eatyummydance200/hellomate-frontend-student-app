@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Switch, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/src/components/Text';
 
 const closeIcon = require('@/assets/icons/icon-close.svg');
@@ -42,6 +43,7 @@ function ToggleRow({ title, description, value, onChange, isLast }: ToggleRowPro
 
 export default function NotificationSettingsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [prefs, setPrefs] = useState({
     dmChat: true,
     clubChat: true,
@@ -54,7 +56,10 @@ export default function NotificationSettingsScreen() {
   return (
     <View className="flex-1 bg-background">
       {/* 헤더 영역 */}
-      <View className="flex-row items-center justify-between border-b border-border bg-background px-24 py-19">
+      <View
+        className="flex-row items-center justify-between border-b border-border bg-background px-24 pb-19"
+        style={{ paddingTop: insets.top + 19 }}
+      >
         <Text weight="semibold" className="text-[20px] leading-[30px] text-[#3d3d3d]">
           알림 설정
         </Text>
