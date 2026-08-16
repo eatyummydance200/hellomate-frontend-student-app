@@ -6,7 +6,6 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="notifications" options={{ title: '알림' }} />
     </Stack>
   );
 }
