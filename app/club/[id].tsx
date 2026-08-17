@@ -21,44 +21,70 @@ const CLUB = {
   hostRole: '국제 홍보대사',
 };
 
+const styles = {
+  container: 'flex-1 bg-background',
+  header: 'flex-row items-center gap-10 border-b border-border bg-background px-20 py-20',
+  headerTitle: 'text-[20px] leading-[30px] text-[#3d3d3d]',
+  scroll: 'flex-1',
+  scrollContent: 'gap-20 px-20 pb-32 pt-16',
+  title: 'text-[20px] leading-[30px] text-text-strong',
+  introCard: 'gap-12 rounded-xl bg-background p-16 shadow-sm',
+  introTitle: 'text-[17px] leading-[22px] text-text-strong',
+  introBody: 'gap-12',
+  introParagraph: 'text-[14px] leading-[20px] text-text',
+  bulletList: 'gap-8',
+  progressCard: 'gap-12 rounded-lg bg-background px-16 py-13 shadow-sm',
+  progressHeaderRow: 'flex-row items-center justify-between',
+  progressTitle: 'text-[16px] leading-[24px] text-text-strong',
+  progressSpotsLeft: 'text-[14px] leading-[20px] text-primary',
+  progressTrack: 'h-12 overflow-hidden rounded-full bg-background-muted',
+  progressFill: 'h-full rounded-full bg-primary',
+  hostRow: 'flex-row items-center justify-between rounded-lg bg-background-muted/50 p-16',
+  hostInfoRow: 'flex-row items-center gap-12',
+  hostAvatarWrap: 'h-48 w-48 items-center justify-center overflow-hidden rounded-full border-2 border-background shadow-sm',
+  hostTextWrap: 'gap-[2px]',
+  hostName: 'text-[16px] leading-[24px] text-text-strong',
+  hostRole: 'text-[12px] leading-[18px] text-text',
+  hostChatButton: 'h-40 w-40 items-center justify-center rounded-full bg-primary',
+  footer: 'gap-9 border-t border-border-strong/20 bg-background/80 px-18 pb-18 pt-19',
+  footerNote: 'text-center text-[12px] leading-[18px] text-text',
+  joinButton: 'h-[52px] w-full items-center justify-center rounded-lg bg-primary',
+} as const;
+
 export default function ClubDetailScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={styles.container}>
       {/* 헤더 영역 */}
-      <View className="flex-row items-center gap-10 border-b border-border bg-background px-20 py-20">
+      <View className={styles.header}>
         <Pressable onPress={() => router.back()} hitSlop={8}>
           <Image source={chevronLeftIcon} style={{ width: 9, height: 17 }} />
         </Pressable>
-        <Text weight="semibold" className="text-[20px] leading-[30px] text-[#3d3d3d]">
+        <Text weight="semibold" className={styles.headerTitle}>
           클럽 상세글
         </Text>
       </View>
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-20 px-20 pb-32 pt-16"
-        showsVerticalScrollIndicator={false}
-      >
-        <Text weight="semibold" className="text-[20px] leading-[30px] text-text-strong">
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text weight="semibold" className={styles.title}>
           {CLUB.title}
         </Text>
 
         {/* 클럽 소개 카드 */}
-        <View className="gap-12 rounded-xl bg-background p-16 shadow-sm">
-          <Text weight="medium" className="text-[17px] leading-[22px] text-text-strong">
+        <View className={styles.introCard}>
+          <Text weight="medium" className={styles.introTitle}>
             클럽 소개
           </Text>
-          <View className="gap-12">
+          <View className={styles.introBody}>
             {CLUB.intro.map((paragraph) => (
-              <Text key={paragraph} weight="medium" className="text-[14px] leading-[20px] text-text">
+              <Text key={paragraph} weight="medium" className={styles.introParagraph}>
                 {paragraph}
               </Text>
             ))}
-            <View className="gap-8">
+            <View className={styles.bulletList}>
               {CLUB.bullets.map((bullet) => (
-                <Text key={bullet} weight="medium" className="text-[14px] leading-[20px] text-text">
+                <Text key={bullet} weight="medium" className={styles.introParagraph}>
                   {bullet}
                 </Text>
               ))}
@@ -67,50 +93,47 @@ export default function ClubDetailScreen() {
         </View>
 
         {/* 모집 현황 진행바 */}
-        <View className="gap-12 rounded-lg bg-background px-16 py-13 shadow-sm">
-          <View className="flex-row items-center justify-between">
-            <Text weight="medium" className="text-[16px] leading-[24px] text-text-strong">
+        <View className={styles.progressCard}>
+          <View className={styles.progressHeaderRow}>
+            <Text weight="medium" className={styles.progressTitle}>
               모집 현황
             </Text>
-            <Text weight="medium" className="text-[14px] leading-[20px] text-primary">
+            <Text weight="medium" className={styles.progressSpotsLeft}>
               {CLUB.spotsLeftLabel}
             </Text>
           </View>
-          <View className="h-12 overflow-hidden rounded-full bg-background-muted">
-            <View className="h-full rounded-full bg-primary" style={{ width: `${CLUB.progressPercent}%` }} />
+          <View className={styles.progressTrack}>
+            <View className={styles.progressFill} style={{ width: `${CLUB.progressPercent}%` }} />
           </View>
         </View>
 
         {/* 클럽장 정보 */}
-        <View className="flex-row items-center justify-between rounded-lg bg-background-muted/50 p-16">
-          <View className="flex-row items-center gap-12">
-            <View className="h-48 w-48 items-center justify-center overflow-hidden rounded-full border-2 border-background shadow-sm">
+        <View className={styles.hostRow}>
+          <View className={styles.hostInfoRow}>
+            <View className={styles.hostAvatarWrap}>
               <Image source={hostAvatar} style={{ width: '100%', height: '100%' }} contentFit="cover" />
             </View>
-            <View className="gap-[2px]">
-              <Text weight="bold" className="text-[16px] leading-[24px] text-text-strong">
+            <View className={styles.hostTextWrap}>
+              <Text weight="bold" className={styles.hostName}>
                 {CLUB.hostName}
               </Text>
-              <Text weight="medium" className="text-[12px] leading-[18px] text-text">
+              <Text weight="medium" className={styles.hostRole}>
                 {CLUB.hostRole}
               </Text>
             </View>
           </View>
-          <Pressable className="h-40 w-40 items-center justify-center rounded-full bg-primary">
+          <Pressable className={styles.hostChatButton}>
             <Image source={chatBubbleIcon} style={{ width: 20, height: 20 }} />
           </Pressable>
         </View>
       </ScrollView>
 
       {/* 하단 고정 참여 CTA */}
-      <View className="gap-9 border-t border-border-strong/20 bg-background/80 px-18 pb-18 pt-19">
-        <Text weight="medium" className="text-center text-[12px] leading-[18px] text-text">
+      <View className={styles.footer}>
+        <Text weight="medium" className={styles.footerNote}>
           가입하면 클럽 채팅방에 참여할 수 있어요
         </Text>
-        <Pressable
-          className="h-[52px] w-full items-center justify-center rounded-lg bg-primary"
-          onPress={() => router.push('/club/joined')}
-        >
+        <Pressable className={styles.joinButton} onPress={() => router.push('/club/joined')}>
           <Text weight="semibold" color="inverse" size="body">
             참여하기
           </Text>

@@ -37,42 +37,73 @@ const ARTICLE = {
   duration: '약 2~3주',
 };
 
+const styles = {
+  container: 'flex-1 bg-background',
+  header: 'flex-row items-center gap-10 border-b border-border bg-background px-20 py-20',
+  headerTitle: 'text-[20px] leading-[30px] text-[#3d3d3d]',
+  scroll: 'flex-1',
+  scrollContent: 'gap-20 px-20 pb-32 pt-16',
+  mainCard: 'gap-15 rounded-xl border border-border-strong/30 bg-background p-18 shadow-sm',
+  titleGroup: 'gap-[5px] pt-4',
+  articleTitle: 'text-[20px] leading-[30px] text-text-strong',
+  updatedRow: 'flex-row items-center gap-6',
+  updatedText: 'text-[10px] leading-[16px] text-[#595c7e]',
+  noticeBanner: 'flex-row items-center gap-6 rounded-md border border-primary-light/20 bg-primary-light/10 px-[23px] py-4',
+  noticeText: 'flex-1 text-[10px] leading-[20px] text-primary-dark',
+  stepRow: 'flex-row gap-16 pt-15',
+  stepBadgeCol: 'items-center',
+  stepBadge: 'h-32 w-32 items-center justify-center rounded-full bg-primary shadow-sm',
+  stepBadgeText: 'text-[12px] leading-[16px] text-white',
+  stepConnector: 'w-[2px] flex-1 bg-[#dee4e0]',
+  stepContent: 'flex-1 gap-4 pb-4',
+  stepTitle: 'text-[14px] leading-[20px] text-text-strong',
+  stepDesc: 'text-[13px] leading-[20px] text-[#595c7e]',
+  tagsRow: 'flex-row gap-8 pt-4',
+  tagChip: 'rounded-sm bg-background-muted px-8 py-[3px]',
+  tagText: 'text-[11px] leading-[16.5px] text-[#595c7e]',
+  infoCardsRow: 'flex-row gap-14',
+  infoCard: 'flex-1 gap-8 rounded-lg border border-border-strong/20 bg-background p-17 shadow-sm',
+  infoCardLabel: 'text-[12px] leading-[16px] text-[#595c7e]',
+  infoCardValue: 'text-[16px] leading-[24px] text-text-strong',
+  footer: 'flex-row gap-8 px-20 pb-20 pt-8',
+  editButton: 'h-56 flex-1 items-center justify-center rounded-lg border border-primary',
+  editButtonLabel: 'text-[17px] leading-[22px] text-primary',
+  linkButton: 'h-56 flex-[1.15] items-center justify-center rounded-lg bg-primary',
+  linkButtonLabel: 'text-[17px] leading-[22px] text-white',
+} as const;
+
 export default function InfoDetailScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={styles.container}>
       {/* 헤더 영역 */}
-      <View className="flex-row items-center gap-10 border-b border-border bg-background px-20 py-20">
+      <View className={styles.header}>
         <Pressable onPress={() => router.back()} hitSlop={8}>
           <Image source={chevronLeftIcon} style={{ width: 9, height: 17 }} />
         </Pressable>
-        <Text weight="semibold" className="text-[20px] leading-[30px] text-[#3d3d3d]">
+        <Text weight="semibold" className={styles.headerTitle}>
           정보글
         </Text>
       </View>
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-20 px-20 pb-32 pt-16"
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* 본문 카드 */}
-        <View className="gap-15 rounded-xl border border-border-strong/30 bg-background p-18 shadow-sm">
-          <View className="gap-[5px] pt-4">
-            <Text weight="semibold" className="text-[20px] leading-[30px] text-text-strong">
+        <View className={styles.mainCard}>
+          <View className={styles.titleGroup}>
+            <Text weight="semibold" className={styles.articleTitle}>
               {ARTICLE.title}
             </Text>
-            <View className="flex-row items-center gap-6">
+            <View className={styles.updatedRow}>
               <Image source={calendarIcon} style={{ width: 8, height: 9 }} />
-              <Text className="text-[10px] leading-[16px] text-[#595c7e]">{ARTICLE.updatedAt}</Text>
+              <Text className={styles.updatedText}>{ARTICLE.updatedAt}</Text>
             </View>
           </View>
 
           {/* 핵심 안내 배너 */}
-          <View className="flex-row items-center gap-6 rounded-md border border-primary-light/20 bg-primary-light/10 px-[23px] py-4">
+          <View className={styles.noticeBanner}>
             <Image source={infoCircleIcon} style={{ width: 11, height: 11 }} />
-            <Text weight="medium" className="flex-1 text-[10px] leading-[20px] text-primary-dark">
+            <Text weight="medium" className={styles.noticeText}>
               {ARTICLE.notice}
             </Text>
           </View>
@@ -82,27 +113,27 @@ export default function InfoDetailScreen() {
             {ARTICLE.steps.map((step, index) => {
               const isLast = index === ARTICLE.steps.length - 1;
               return (
-                <View key={step.title} className="flex-row gap-16 pt-15">
-                  <View className="items-center">
-                    <View className="h-32 w-32 items-center justify-center rounded-full bg-primary shadow-sm">
-                      <Text weight="bold" className="text-[12px] leading-[16px] text-white">
+                <View key={step.title} className={styles.stepRow}>
+                  <View className={styles.stepBadgeCol}>
+                    <View className={styles.stepBadge}>
+                      <Text weight="bold" className={styles.stepBadgeText}>
                         {index + 1}
                       </Text>
                     </View>
-                    {!isLast ? <View className="w-[2px] flex-1 bg-[#dee4e0]" /> : null}
+                    {!isLast ? <View className={styles.stepConnector} /> : null}
                   </View>
-                  <View className="flex-1 gap-4 pb-4">
-                    <Text weight="semibold" className="text-[14px] leading-[20px] text-text-strong">
+                  <View className={styles.stepContent}>
+                    <Text weight="semibold" className={styles.stepTitle}>
                       {step.title}
                     </Text>
-                    <Text weight="medium" className="text-[13px] leading-[20px] text-[#595c7e]">
+                    <Text weight="medium" className={styles.stepDesc}>
                       {step.desc}
                     </Text>
                     {step.tags ? (
-                      <View className="flex-row gap-8 pt-4">
+                      <View className={styles.tagsRow}>
                         {step.tags.map((tag) => (
-                          <View key={tag} className="rounded-sm bg-background-muted px-8 py-[3px]">
-                            <Text weight="medium" className="text-[11px] leading-[16.5px] text-[#595c7e]">
+                          <View key={tag} className={styles.tagChip}>
+                            <Text weight="medium" className={styles.tagText}>
                               {tag}
                             </Text>
                           </View>
@@ -117,22 +148,22 @@ export default function InfoDetailScreen() {
         </View>
 
         {/* 수수료 / 처리 기간 카드 */}
-        <View className="flex-row gap-14">
-          <View className="flex-1 gap-8 rounded-lg border border-border-strong/20 bg-background p-17 shadow-sm">
+        <View className={styles.infoCardsRow}>
+          <View className={styles.infoCard}>
             <Image source={feeIcon} style={{ width: 22, height: 16 }} />
-            <Text weight="semibold" className="text-[12px] leading-[16px] text-[#595c7e]">
+            <Text weight="semibold" className={styles.infoCardLabel}>
               예상 수수료
             </Text>
-            <Text weight="medium" className="text-[16px] leading-[24px] text-text-strong">
+            <Text weight="medium" className={styles.infoCardValue}>
               {ARTICLE.fee}
             </Text>
           </View>
-          <View className="flex-1 gap-8 rounded-lg border border-border-strong/20 bg-background p-17 shadow-sm">
+          <View className={styles.infoCard}>
             <Image source={durationIcon} style={{ width: 17, height: 20 }} />
-            <Text weight="semibold" className="text-[12px] leading-[16px] text-[#595c7e]">
+            <Text weight="semibold" className={styles.infoCardLabel}>
               처리 기간
             </Text>
-            <Text weight="medium" className="text-[16px] leading-[24px] text-text-strong">
+            <Text weight="medium" className={styles.infoCardValue}>
               {ARTICLE.duration}
             </Text>
           </View>
@@ -140,17 +171,14 @@ export default function InfoDetailScreen() {
       </ScrollView>
 
       {/* 하단 액션 버튼 */}
-      <View className="flex-row gap-8 px-20 pb-20 pt-8">
-        <Pressable
-          className="h-56 flex-1 items-center justify-center rounded-lg border border-primary"
-          onPress={() => router.push('/info/edit-request')}
-        >
-          <Text weight="semibold" className="text-[17px] leading-[22px] text-primary">
+      <View className={styles.footer}>
+        <Pressable className={styles.editButton} onPress={() => router.push('/info/edit-request')}>
+          <Text weight="semibold" className={styles.editButtonLabel}>
             정보 수정 요청하기
           </Text>
         </Pressable>
-        <Pressable className="h-56 flex-[1.15] items-center justify-center rounded-lg bg-primary">
-          <Text weight="semibold" className="text-[17px] leading-[22px] text-white">
+        <Pressable className={styles.linkButton}>
+          <Text weight="semibold" className={styles.linkButtonLabel}>
             링크로 접속하기
           </Text>
         </Pressable>

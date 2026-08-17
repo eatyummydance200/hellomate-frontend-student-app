@@ -55,19 +55,53 @@ const MESSAGES: Message[] = [
   },
 ];
 
+const styles = {
+  container: 'flex-1 bg-background-subtle',
+  header: 'flex-row items-center justify-between border-b border-border bg-background px-13 py-12',
+  headerTitle: 'text-[15px] leading-[19px] text-text-strong',
+  headerSubtitle: 'pt-7 text-[11px] leading-[16px] text-text-muted',
+  noticeBanner: 'mx-19 mt-16 gap-12 rounded-lg border border-border bg-primary-light/20 p-16',
+  noticeHeaderRow: 'flex-row items-center justify-between',
+  noticeHeaderLeft: 'flex-row items-center gap-11',
+  noticeTitle: 'text-[16px] leading-[24px] text-[#3d3d3d]',
+  noticeBody: 'gap-4',
+  noticeLine: 'text-[12px] leading-[18px] text-text',
+  scroll: 'flex-1',
+  scrollContent: 'gap-13 px-[5px] pt-18 pb-16',
+  systemMessages: 'items-center gap-13',
+  systemMessageChip: 'rounded-full bg-background-muted px-12 py-4',
+  systemMessageText: 'text-[12px] leading-[18px] text-text-muted',
+  messageList: 'gap-6',
+  myMessageRow: 'flex-row items-end justify-end gap-4',
+  myMessageMeta: 'items-end',
+  unreadText: 'text-[11px] leading-[16px] text-primary',
+  messageTime: 'text-[11px] leading-[16px] text-[#3d3d3d]',
+  myBubble: 'max-w-[256px] rounded-lg bg-primary px-12 py-8',
+  bubbleText: 'text-[14px] leading-[21px]',
+  staffMessageGroup: 'gap-4',
+  staffAuthor: 'pl-4 text-[12px] leading-[18px] text-text',
+  staffMessageRow: 'flex-row items-end gap-4',
+  staffBubble: 'max-w-[256px] rounded-lg bg-background px-12 py-8',
+  staffMeta: 'items-start',
+  footer: 'px-16 pb-20 pt-8',
+  inputBar: 'h-[52px] w-full flex-row items-center justify-between rounded-full bg-background pl-16 pr-8 shadow-sm',
+  inputPlaceholder: 'text-[#8b8b8b]',
+  sendButton: 'h-[36px] w-[36px] items-center justify-center rounded-full bg-primary',
+} as const;
+
 export default function ClubChatScreen() {
   const router = useRouter();
   const [noticeExpanded, setNoticeExpanded] = useState(false);
 
   return (
-    <View className="flex-1 bg-background-subtle">
+    <View className={styles.container}>
       {/* 헤더 영역 */}
-      <View className="flex-row items-center justify-between border-b border-border bg-background px-13 py-12">
+      <View className={styles.header}>
         <View>
-          <Text weight="medium" className="text-[15px] leading-[19px] text-text-strong">
+          <Text weight="medium" className={styles.headerTitle}>
             아시아 음식 러버들
           </Text>
-          <Text className="pt-7 text-[11px] leading-[16px] text-text-muted">멤버 24명</Text>
+          <Text className={styles.headerSubtitle}>멤버 24명</Text>
         </View>
         <Pressable onPress={() => router.back()} hitSlop={8}>
           <Image source={closeIcon} style={{ width: 24, height: 24 }} />
@@ -75,30 +109,23 @@ export default function ClubChatScreen() {
       </View>
 
       {/* 클럽 소개 배너 (펼치기/접기) */}
-      <Pressable
-        className="mx-19 mt-16 gap-12 rounded-lg border border-border bg-primary-light/20 p-16"
-        onPress={() => setNoticeExpanded((v) => !v)}
-      >
-        <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-11">
+      <Pressable className={styles.noticeBanner} onPress={() => setNoticeExpanded((v) => !v)}>
+        <View className={styles.noticeHeaderRow}>
+          <View className={styles.noticeHeaderLeft}>
             <Image source={infoCircleIcon} style={{ width: 24, height: 24 }} />
-            <Text weight="semibold" className="text-[16px] leading-[24px] text-[#3d3d3d]">
+            <Text weight="semibold" className={styles.noticeTitle}>
               클럽 소개
             </Text>
           </View>
           <Image
             source={chevronDownIcon}
-            style={{
-              width: 12,
-              height: 6,
-              transform: [{ rotate: noticeExpanded ? '180deg' : '0deg' }],
-            }}
+            style={{ width: 12, height: 6, transform: [{ rotate: noticeExpanded ? '180deg' : '0deg' }] }}
           />
         </View>
         {noticeExpanded ? (
-          <View className="gap-4">
+          <View className={styles.noticeBody}>
             {CLUB_NOTICE.map((line) => (
-              <Text key={line} className="text-[12px] leading-[18px] text-text">
+              <Text key={line} className={styles.noticeLine}>
                 {line}
               </Text>
             ))}
@@ -106,41 +133,41 @@ export default function ClubChatScreen() {
         ) : null}
       </Pressable>
 
-      <ScrollView className="flex-1" contentContainerClassName="gap-13 px-[5px] pt-18 pb-16">
-        <View className="items-center gap-13">
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent}>
+        <View className={styles.systemMessages}>
           {SYSTEM_MESSAGES.map((message) => (
-            <View key={message} className="rounded-full bg-background-muted px-12 py-4">
-              <Text className="text-[12px] leading-[18px] text-text-muted">{message}</Text>
+            <View key={message} className={styles.systemMessageChip}>
+              <Text className={styles.systemMessageText}>{message}</Text>
             </View>
           ))}
         </View>
 
-        <View className="gap-6">
+        <View className={styles.messageList}>
           {MESSAGES.map((message) =>
             message.from === 'me' ? (
-              <View key={message.id} className="flex-row items-end justify-end gap-4">
-                <View className="items-end">
-                  <Text className="text-[11px] leading-[16px] text-primary">{message.unread}</Text>
-                  <Text className="text-[11px] leading-[16px] text-[#3d3d3d]">{message.time}</Text>
+              <View key={message.id} className={styles.myMessageRow}>
+                <View className={styles.myMessageMeta}>
+                  <Text className={styles.unreadText}>{message.unread}</Text>
+                  <Text className={styles.messageTime}>{message.time}</Text>
                 </View>
-                <View className="max-w-[256px] rounded-lg bg-primary px-12 py-8">
-                  <Text color="inverse" className="text-[14px] leading-[21px]">
+                <View className={styles.myBubble}>
+                  <Text color="inverse" className={styles.bubbleText}>
                     {message.text}
                   </Text>
                 </View>
               </View>
             ) : (
-              <View key={message.id} className="gap-4">
-                <Text className="pl-4 text-[12px] leading-[18px] text-text">{message.author}</Text>
-                <View className="flex-row items-end gap-4">
-                  <View className="max-w-[256px] rounded-lg bg-background px-12 py-8">
-                    <Text color="strong" className="text-[14px] leading-[21px]">
+              <View key={message.id} className={styles.staffMessageGroup}>
+                <Text className={styles.staffAuthor}>{message.author}</Text>
+                <View className={styles.staffMessageRow}>
+                  <View className={styles.staffBubble}>
+                    <Text color="strong" className={styles.bubbleText}>
                       {message.text}
                     </Text>
                   </View>
-                  <View className="items-start">
-                    <Text className="text-[11px] leading-[16px] text-primary">{message.unread}</Text>
-                    <Text className="text-[11px] leading-[16px] text-[#3d3d3d]">{message.time}</Text>
+                  <View className={styles.staffMeta}>
+                    <Text className={styles.unreadText}>{message.unread}</Text>
+                    <Text className={styles.messageTime}>{message.time}</Text>
                   </View>
                 </View>
               </View>
@@ -150,12 +177,12 @@ export default function ClubChatScreen() {
       </ScrollView>
 
       {/* 하단 메시지 입력 바 */}
-      <View className="px-16 pb-20 pt-8">
-        <View className="h-[52px] w-full flex-row items-center justify-between rounded-full bg-background pl-16 pr-8 shadow-sm">
-          <Text size="body" className="text-[#8b8b8b]">
+      <View className={styles.footer}>
+        <View className={styles.inputBar}>
+          <Text size="body" className={styles.inputPlaceholder}>
             메시지 보내기
           </Text>
-          <View className="h-[36px] w-[36px] items-center justify-center rounded-full bg-primary">
+          <View className={styles.sendButton}>
             <Image source={sendIcon} style={{ width: 16, height: 9 }} />
           </View>
         </View>

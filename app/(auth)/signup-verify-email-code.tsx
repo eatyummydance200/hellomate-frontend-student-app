@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, TextInput, View } from 'react-native';
+import { tv } from 'tailwind-variants';
 import { Text } from '@/src/components/Text';
 
 const chevronLeftIcon = require('@/assets/icons/icon-chevron-left.svg');
@@ -18,6 +19,57 @@ function formatTime(totalSeconds: number) {
   const seconds = totalSeconds % 60;
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
+
+const styles = {
+  container: 'flex-1 bg-white',
+  header: 'flex-row items-center gap-10 border-b border-border bg-background px-20 py-20',
+  headerTitle: 'text-[20px] leading-[1.5] text-[#3d3d3d]',
+  content: 'flex-1 px-24 pt-24',
+  introSection: 'gap-8',
+  introTitle: 'text-[20px] leading-[32px] text-text-strong',
+  introDesc: 'text-[14px] leading-[20px] text-[#595c7e]',
+  codeSection: 'gap-24 pt-24',
+  codeGroup: 'gap-6',
+  codeRow: 'flex-row justify-between',
+  errorRow: 'flex-row items-center gap-4 pt-4',
+  errorText: 'text-[12px] leading-[16px] text-[#e56d6d]',
+  timerSection: 'items-center',
+  timerRow: 'flex-row items-center gap-8',
+  resendButton: 'pt-16',
+  resendLabel: 'text-[12px] leading-[16px] text-[#575858] underline',
+  footer: 'px-20 pb-20 pt-8',
+  submitButtonLabel: 'text-[17px] leading-[22px] text-white',
+} as const;
+
+const codeInput = tv({
+  base: 'h-56 w-43 rounded-md border bg-white text-center font-sans text-[20px]',
+  variants: {
+    error: {
+      true: 'border-danger text-danger',
+      false: 'border-border-strong text-text-strong',
+    },
+  },
+});
+
+const timerText = tv({
+  base: 'text-[15px] leading-[22px]',
+  variants: {
+    error: {
+      true: 'text-danger',
+      false: 'text-primary',
+    },
+  },
+});
+
+const submitButton = tv({
+  base: 'h-56 flex-row items-center justify-center gap-8 rounded-lg',
+  variants: {
+    correct: {
+      true: 'bg-primary',
+      false: 'bg-text-muted/50',
+    },
+  },
+});
 
 export default function SignUpVerifyEmailCodeScreen() {
   const router = useRouter();
@@ -52,32 +104,32 @@ export default function SignUpVerifyEmailCodeScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <View className={styles.container}>
       {/* 헤더 영역 */}
-      <View className="flex-row items-center gap-10 border-b border-border bg-background px-20 py-20">
+      <View className={styles.header}>
         <Pressable onPress={() => router.back()} hitSlop={8}>
           <Image source={chevronLeftIcon} style={{ width: 9, height: 17 }} />
         </Pressable>
-        <Text weight="semibold" className="text-[20px] leading-[1.5] text-[#3d3d3d]">
+        <Text weight="semibold" className={styles.headerTitle}>
           이메일 인증
         </Text>
       </View>
 
-      <View className="flex-1 px-24 pt-24">
+      <View className={styles.content}>
         {/* 안내 문구 영역 */}
-        <View className="gap-8">
-          <Text weight="medium" className="text-[20px] leading-[32px] text-text-strong">
+        <View className={styles.introSection}>
+          <Text weight="medium" className={styles.introTitle}>
             인증 번호 입력
           </Text>
-          <Text weight="medium" className="text-[14px] leading-[20px] text-[#595c7e]">
+          <Text weight="medium" className={styles.introDesc}>
             이메일로 발송된 6자리 인증 번호를 입력해 주세요.
           </Text>
         </View>
 
         {/* 인증 번호 입력 영역 */}
-        <View className="gap-24 pt-24">
-          <View className="gap-6">
-            <View className="flex-row justify-between">
+        <View className={styles.codeSection}>
+          <View className={styles.codeGroup}>
+            <View className={styles.codeRow}>
               {digits.map((digit, index) => (
                 <TextInput
                   key={index}
@@ -88,31 +140,29 @@ export default function SignUpVerifyEmailCodeScreen() {
                   onChangeText={(value) => handleChangeDigit(value, index)}
                   keyboardType="number-pad"
                   maxLength={1}
-                  className={`h-56 w-43 rounded-md border bg-white text-center font-sans text-[20px] ${
-                    isError ? 'border-danger text-danger' : 'border-border-strong text-text-strong'
-                  }`}
+                  className={codeInput({ error: isError })}
                 />
               ))}
             </View>
             {isError && (
-              <View className="flex-row items-center gap-4 pt-4">
+              <View className={styles.errorRow}>
                 <Image source={alertIcon} style={{ width: 15, height: 15 }} />
-                <Text weight="medium" className="text-[12px] leading-[16px] text-[#e56d6d]">
+                <Text weight="medium" className={styles.errorText}>
                   인증번호가 일치하지 않아요
                 </Text>
               </View>
             )}
           </View>
 
-          <View className="items-center">
-            <View className="flex-row items-center gap-8">
+          <View className={styles.timerSection}>
+            <View className={styles.timerRow}>
               <Image source={timerIcon} style={{ width: 15, height: 17.5 }} />
-              <Text weight="bold" className={`text-[15px] leading-[22px] ${isError ? 'text-danger' : 'text-primary'}`}>
+              <Text weight="bold" className={timerText({ error: isError })}>
                 {formatTime(secondsLeft)}
               </Text>
             </View>
-            <Pressable onPress={handleResend} className="pt-16">
-              <Text weight="semibold" className="text-[12px] leading-[16px] text-[#575858] underline">
+            <Pressable onPress={handleResend} className={styles.resendButton}>
+              <Text weight="semibold" className={styles.resendLabel}>
                 인증 번호 재발송
               </Text>
             </Pressable>
@@ -120,17 +170,13 @@ export default function SignUpVerifyEmailCodeScreen() {
         </View>
       </View>
 
-      <View className="px-20 pb-20 pt-8">
+      <View className={styles.footer}>
         <Pressable
           disabled={!isCorrect}
-          className={
-            isCorrect
-              ? 'h-56 flex-row items-center justify-center gap-8 rounded-lg bg-primary'
-              : 'h-56 flex-row items-center justify-center gap-8 rounded-lg bg-text-muted/50'
-          }
+          className={submitButton({ correct: isCorrect })}
           onPress={() => router.push('/(auth)/signup-verify-email-done')}
         >
-          <Text weight="semibold" className="text-[17px] leading-[22px] text-white">
+          <Text weight="semibold" className={styles.submitButtonLabel}>
             다음
           </Text>
           <Image source={arrowRightIcon} style={{ width: 13.33, height: 13.33 }} />

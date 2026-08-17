@@ -5,35 +5,46 @@ import { Text } from '@/src/components/Text';
 
 const checkIcon = require('@/assets/icons/icon-check.svg');
 
+const styles = {
+  overlay: 'flex-1 justify-end bg-black/20',
+  backdrop: 'absolute inset-0',
+  sheet: 'gap-16 rounded-t-[32px] bg-background px-20 pb-32 pt-20 shadow-lg',
+  handle: 'h-6 w-48 self-center rounded-full bg-border-strong',
+  content: 'items-center gap-16 pt-16',
+  badgeOuter: 'h-64 w-64 items-center justify-center rounded-full bg-primary-light/20',
+  badgeInner: 'h-40 w-40 items-center justify-center rounded-full bg-primary',
+  textGroup: 'items-center gap-8',
+  title: 'text-[20px] leading-[32px] text-text-strong',
+  desc: 'text-[14px] leading-[20px] text-text',
+  enterButton: 'h-[52px] w-full items-center justify-center rounded-lg bg-primary',
+} as const;
+
 export default function ClubJoinedScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 justify-end bg-black/20">
-      <Pressable className="absolute inset-0" onPress={() => router.back()} />
+    <View className={styles.overlay}>
+      <Pressable className={styles.backdrop} onPress={() => router.back()} />
 
       {/* 가입 완료 바텀시트 */}
-      <View className="gap-16 rounded-t-[32px] bg-background px-20 pb-32 pt-20 shadow-lg">
-        <View className="h-6 w-48 self-center rounded-full bg-border-strong" />
+      <View className={styles.sheet}>
+        <View className={styles.handle} />
 
-        <View className="items-center gap-16 pt-16">
-          <View className="h-64 w-64 items-center justify-center rounded-full bg-primary-light/20">
-            <View className="h-40 w-40 items-center justify-center rounded-full bg-primary">
+        <View className={styles.content}>
+          <View className={styles.badgeOuter}>
+            <View className={styles.badgeInner}>
               <Image source={checkIcon} style={{ width: 19, height: 14 }} />
             </View>
           </View>
-          <View className="items-center gap-8">
-            <Text weight="medium" className="text-[20px] leading-[32px] text-text-strong">
+          <View className={styles.textGroup}>
+            <Text weight="medium" className={styles.title}>
               클럽에 참여했어요!
             </Text>
-            <Text className="text-[14px] leading-[20px] text-text">멤버들과 채팅방에서 인사해보세요.</Text>
+            <Text className={styles.desc}>멤버들과 채팅방에서 인사해보세요.</Text>
           </View>
         </View>
 
-        <Pressable
-          className="h-[52px] w-full items-center justify-center rounded-lg bg-primary"
-          onPress={() => router.replace('/club/chat')}
-        >
+        <Pressable className={styles.enterButton} onPress={() => router.replace('/club/chat')}>
           <Text weight="semibold" color="inverse" size="body">
             채팅방 입장하기
           </Text>

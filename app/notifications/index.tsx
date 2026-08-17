@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
+import { tv } from 'tailwind-variants';
 import { Text } from '@/src/components/Text';
 
 const chevronLeftIcon = require('@/assets/icons/icon-chevron-left.svg');
@@ -128,26 +129,110 @@ const ALARMS: AlarmItem[] = [
   },
 ];
 
+const styles = {
+  container: 'flex-1 bg-background',
+  header: 'flex-row items-center justify-between border-b border-border bg-background px-20 py-20',
+  headerLeft: 'flex-row items-center gap-10',
+  headerTitle: 'text-[20px] leading-[30px] text-[#3d3d3d]',
+  tabRow: 'flex-row bg-background',
+  scroll: 'flex-1',
+  scrollContent: 'gap-20 px-20 pb-32 pt-16',
+  filterRow: 'flex-row gap-8',
+  chatRow: 'flex-row items-start justify-between border-b border-border py-16',
+  chatTextWrap: 'flex-1 gap-5 pr-12',
+  chatNameRow: 'flex-row items-center gap-6',
+  chatName: 'text-[16px] leading-6 text-[#3d3d3d]',
+  chatMessage: 'text-[12px] leading-5 text-[#1c1e1e]',
+  chatSenderPrefix: 'text-[14px] leading-5 text-primary',
+  chatMessageText: 'text-[14px] leading-5 text-text',
+  chatMetaCol: 'items-end gap-8',
+  unreadBadge: 'h-20 items-center justify-center rounded-full bg-primary px-6',
+  unreadBadgeText: 'text-[12px] leading-[18px] text-text-inverse',
+  chatTime: 'text-[12px] leading-[18px] text-[#8b8b8b]',
+  alarmSections: 'gap-20',
+  alarmDateGroup: 'gap-12',
+  alarmDateLabel: 'text-[17px] leading-[22px] text-text-strong',
+  alarmList: 'gap-12',
+  alarmHeaderRow: 'flex-row items-center justify-between',
+  alarmCategoryBadge: 'h-24 items-center justify-center rounded-lg px-8',
+  alarmCategoryText: 'text-[10px] leading-6 text-[#1c1e1e]',
+  alarmMetaRow: 'flex-row items-center gap-4',
+  alarmTime: 'text-[12px] leading-4 text-text-muted',
+  unreadDot: 'h-8 w-8 rounded-full bg-primary-light',
+  alarmTitle: 'text-[15px] leading-5 text-text-strong',
+  alarmDesc: 'text-[14px] leading-5 text-text',
+  alarmCta: 'mt-4 h-32 items-center justify-center self-start rounded-md bg-primary px-16',
+  alarmCtaText: 'text-[12px] leading-6 text-text-inverse',
+} as const;
+
+const tabButton = tv({
+  base: 'flex-1 items-center border-b py-10',
+  variants: {
+    active: {
+      true: 'border-primary-dark',
+      false: 'border-[#c6c6cd]',
+    },
+  },
+});
+
+const tabLabel = tv({
+  base: 'text-[16px] leading-6',
+  variants: {
+    active: {
+      true: 'text-primary-dark',
+      false: 'text-[#8e8e93]',
+    },
+  },
+});
+
+const filterChip = tv({
+  base: 'rounded-full px-16 py-4',
+  variants: {
+    active: {
+      true: 'bg-primary',
+      false: 'border border-border bg-background',
+    },
+  },
+});
+
+const filterLabel = tv({
+  base: '',
+  variants: {
+    active: {
+      true: 'text-text-inverse',
+      false: 'text-[#6f6f6f]',
+    },
+  },
+});
+
+const alarmCard = tv({
+  base: 'gap-5 rounded-sm bg-background p-16 shadow-sm',
+  variants: {
+    read: {
+      true: 'opacity-50',
+      false: '',
+    },
+  },
+});
+
 export default function NotificationsScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'채팅' | '알림'>('알림');
   const [chatFilter, setChatFilter] = useState<(typeof CHAT_FILTERS)[number]>('전체');
   const [alarmFilter, setAlarmFilter] = useState<(typeof ALARM_FILTERS)[number]>('전체');
 
-  const visibleChats =
-    chatFilter === '전체' ? CHATS : CHATS.filter((chat) => chat.category === chatFilter);
-  const visibleAlarms =
-    alarmFilter === '전체' ? ALARMS : ALARMS.filter((alarm) => alarm.category === alarmFilter);
+  const visibleChats = chatFilter === '전체' ? CHATS : CHATS.filter((chat) => chat.category === chatFilter);
+  const visibleAlarms = alarmFilter === '전체' ? ALARMS : ALARMS.filter((alarm) => alarm.category === alarmFilter);
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={styles.container}>
       {/* 헤더 영역 */}
-      <View className="flex-row items-center justify-between border-b border-border bg-background px-20 py-20">
-        <View className="flex-row items-center gap-10">
+      <View className={styles.header}>
+        <View className={styles.headerLeft}>
           <Pressable onPress={() => router.back()} hitSlop={8}>
             <Image source={chevronLeftIcon} style={{ width: 9, height: 17 }} />
           </Pressable>
-          <Text weight="semibold" className="text-[20px] leading-[30px] text-[#3d3d3d]">
+          <Text weight="semibold" className={styles.headerTitle}>
             알림
           </Text>
         </View>
@@ -157,54 +242,25 @@ export default function NotificationsScreen() {
       </View>
 
       {/* 채팅/알림 탭 전환 영역 */}
-      <View className="flex-row bg-background">
-        <Pressable
-          onPress={() => setActiveTab('채팅')}
-          className={
-            activeTab === '채팅'
-              ? 'flex-1 items-center border-b border-primary-dark py-10'
-              : 'flex-1 items-center border-b border-[#c6c6cd] py-10'
-          }
-        >
-          <Text
-            weight="semibold"
-            className={
-              activeTab === '채팅' ? 'text-[16px] leading-6 text-primary-dark' : 'text-[16px] leading-6 text-[#8e8e93]'
-            }
-          >
+      <View className={styles.tabRow}>
+        <Pressable onPress={() => setActiveTab('채팅')} className={tabButton({ active: activeTab === '채팅' })}>
+          <Text weight="semibold" className={tabLabel({ active: activeTab === '채팅' })}>
             채팅
           </Text>
         </Pressable>
-        <Pressable
-          onPress={() => setActiveTab('알림')}
-          className={
-            activeTab === '알림'
-              ? 'flex-1 items-center border-b border-primary-dark py-10'
-              : 'flex-1 items-center border-b border-[#c6c6cd] py-10'
-          }
-        >
-          <Text
-            weight="semibold"
-            className={
-              activeTab === '알림' ? 'text-[16px] leading-6 text-primary-dark' : 'text-[16px] leading-6 text-[#8e8e93]'
-            }
-          >
+        <Pressable onPress={() => setActiveTab('알림')} className={tabButton({ active: activeTab === '알림' })}>
+          <Text weight="semibold" className={tabLabel({ active: activeTab === '알림' })}>
             알림
           </Text>
         </Pressable>
       </View>
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-20 px-20 pb-32 pt-16"
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* 필터 태그 영역 */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View className="flex-row gap-8">
+          <View className={styles.filterRow}>
             {(activeTab === '채팅' ? CHAT_FILTERS : ALARM_FILTERS).map((filter) => {
-              const isActive =
-                activeTab === '채팅' ? filter === chatFilter : filter === alarmFilter;
+              const isActive = activeTab === '채팅' ? filter === chatFilter : filter === alarmFilter;
               return (
                 <Pressable
                   key={filter}
@@ -213,13 +269,9 @@ export default function NotificationsScreen() {
                       ? setChatFilter(filter as (typeof CHAT_FILTERS)[number])
                       : setAlarmFilter(filter as (typeof ALARM_FILTERS)[number])
                   }
-                  className={
-                    isActive
-                      ? 'rounded-full bg-primary px-16 py-4'
-                      : 'rounded-full border border-border bg-background px-16 py-4'
-                  }
+                  className={filterChip({ active: isActive })}
                 >
-                  <Text size="label" weight="medium" className={isActive ? 'text-text-inverse' : 'text-[#6f6f6f]'}>
+                  <Text size="label" weight="medium" className={filterLabel({ active: isActive })}>
                     {filter}
                   </Text>
                 </Pressable>
@@ -232,82 +284,72 @@ export default function NotificationsScreen() {
         {activeTab === '채팅' ? (
           <View>
             {visibleChats.map((chat) => (
-              <View key={chat.id} className="flex-row items-start justify-between border-b border-border py-16">
-                <View className="flex-1 gap-5 pr-12">
-                  <View className="flex-row items-center gap-6">
-                    <Text weight="semibold" className="text-[16px] leading-6 text-[#3d3d3d]">
+              <View key={chat.id} className={styles.chatRow}>
+                <View className={styles.chatTextWrap}>
+                  <View className={styles.chatNameRow}>
+                    <Text weight="semibold" className={styles.chatName}>
                       {chat.name}
                     </Text>
                     {chat.isGroup ? <Image source={groupChatIcon} style={{ width: 19, height: 9 }} /> : null}
                   </View>
-                  <Text numberOfLines={2} className="text-[12px] leading-5 text-[#1c1e1e]">
+                  <Text numberOfLines={2} className={styles.chatMessage}>
                     {chat.senderPrefix ? (
                       <>
-                        <Text weight="semibold" className="text-[14px] leading-5 text-primary">
+                        <Text weight="semibold" className={styles.chatSenderPrefix}>
                           {chat.senderPrefix}:{' '}
                         </Text>
-                        <Text className="text-[14px] leading-5 text-text">{chat.message}</Text>
+                        <Text className={styles.chatMessageText}>{chat.message}</Text>
                       </>
                     ) : (
                       chat.message
                     )}
                   </Text>
                 </View>
-                <View className="items-end gap-8">
+                <View className={styles.chatMetaCol}>
                   {chat.unread ? (
-                    <View className="h-20 items-center justify-center rounded-full bg-primary px-6">
-                      <Text className="text-[12px] leading-[18px] text-text-inverse">{chat.unread}</Text>
+                    <View className={styles.unreadBadge}>
+                      <Text className={styles.unreadBadgeText}>{chat.unread}</Text>
                     </View>
                   ) : null}
-                  <Text className="text-[12px] leading-[18px] text-[#8b8b8b]">{chat.time}</Text>
+                  <Text className={styles.chatTime}>{chat.time}</Text>
                 </View>
               </View>
             ))}
           </View>
         ) : (
           /* 알림 목록 영역 */
-          <View className="gap-20">
+          <View className={styles.alarmSections}>
             {(['오늘', '어제'] as const).map((date) => {
               const items = visibleAlarms.filter((alarm) => alarm.date === date);
               if (items.length === 0) return null;
               return (
-                <View key={date} className="gap-12">
-                  <Text weight="semibold" className="text-[17px] leading-[22px] text-text-strong">
+                <View key={date} className={styles.alarmDateGroup}>
+                  <Text weight="semibold" className={styles.alarmDateLabel}>
                     {date}
                   </Text>
-                  <View className="gap-12">
+                  <View className={styles.alarmList}>
                     {items.map((item) => (
-                      <View
-                        key={item.id}
-                        className={
-                          item.read
-                            ? 'gap-5 rounded-sm bg-background p-16 opacity-50 shadow-sm'
-                            : 'gap-5 rounded-sm bg-background p-16 shadow-sm'
-                        }
-                      >
-                        <View className="flex-row items-center justify-between">
-                          <View
-                            className="h-24 items-center justify-center rounded-lg px-8"
-                            style={{ backgroundColor: item.categoryBg }}
-                          >
-                            <Text className="text-[10px] leading-6 text-[#1c1e1e]">{item.category}</Text>
+                      <View key={item.id} className={alarmCard({ read: item.read })}>
+                        <View className={styles.alarmHeaderRow}>
+                          <View className={styles.alarmCategoryBadge} style={{ backgroundColor: item.categoryBg }}>
+                            <Text className={styles.alarmCategoryText}>{item.category}</Text>
                           </View>
-                          <View className="flex-row items-center gap-4">
-                            <Text weight="medium" className="text-[12px] leading-4 text-text-muted">
+                          <View className={styles.alarmMetaRow}>
+                            <Text weight="medium" className={styles.alarmTime}>
                               {item.time}
                             </Text>
-                            {!item.read ? <View className="h-8 w-8 rounded-full bg-primary-light" /> : null}
+                            {!item.read ? <View className={styles.unreadDot} /> : null}
                           </View>
                         </View>
-                        <Text weight="medium" className="text-[15px] leading-5 text-text-strong">
+                        <Text weight="medium" className={styles.alarmTitle}>
                           {item.title}
                         </Text>
-                        <Text weight="medium" numberOfLines={2} className="text-[14px] leading-5 text-text">
+                        <Text weight="medium" numberOfLines={2} className={styles.alarmDesc}>
                           {item.description}
                         </Text>
                         {item.cta ? (
-                          <Pressable className="mt-4 h-32 items-center justify-center self-start rounded-md bg-primary px-16">
-                            <Text weight="semibold" className="text-[12px] leading-6 text-text-inverse">
+                          <Pressable className={styles.alarmCta}>
+                            <Text weight="semibold" className={styles.alarmCtaText}>
                               {item.cta}
                             </Text>
                           </Pressable>

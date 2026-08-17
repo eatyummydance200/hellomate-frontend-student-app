@@ -57,48 +57,58 @@ const COMMENT_GROUPS: CommentGroup[] = [
   },
 ];
 
+const styles = {
+  container: 'flex-1 bg-background',
+  header: 'flex-row items-center gap-10 border-b border-border bg-background px-20 py-20',
+  headerTitle: 'text-[20px] leading-[1.5] text-[#3d3d3d]',
+  scroll: 'flex-1',
+  scrollContent: 'gap-20 px-19 pb-32 pt-24',
+  dateGroup: 'gap-20',
+  dateLabel: 'text-[17px] leading-[22px] text-text-strong',
+  commentCard: 'gap-8 rounded-xl border border-border-strong/30 bg-background p-17 shadow-sm',
+  metaRow: 'flex-row items-center gap-8',
+  unreadDot: 'h-8 w-8 rounded-full bg-primary-light',
+  metaTime: 'text-[12px] leading-[16px] text-text-muted',
+  commentText: 'text-[14px] leading-[22.75px] text-text-strong',
+  quoteBox: 'rounded-md border-l-4 border-primary-light bg-background-subtle py-12 pl-16 pr-12',
+  quoteText: 'text-[12px] leading-[16px] text-text',
+} as const;
+
 export default function MyPageCommentsScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={styles.container}>
       {/* 헤더 영역 */}
-      <View className="flex-row items-center gap-10 border-b border-border bg-background px-20 py-20">
+      <View className={styles.header}>
         <Pressable onPress={() => router.back()} hitSlop={8}>
           <Image source={chevronLeftIcon} style={{ width: 9, height: 17 }} />
         </Pressable>
-        <Text weight="semibold" className="text-[20px] leading-[1.5] text-[#3d3d3d]">
+        <Text weight="semibold" className={styles.headerTitle}>
           내가 작성한 댓글
         </Text>
       </View>
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-20 px-19 pb-32 pt-24"
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {COMMENT_GROUPS.map((group) => (
-          <View key={group.date} className="gap-20">
-            <Text weight="semibold" className="text-[17px] leading-[22px] text-text-strong">
+          <View key={group.date} className={styles.dateGroup}>
+            <Text weight="semibold" className={styles.dateLabel}>
               {group.date}
             </Text>
 
             {group.comments.map((comment) => (
-              <View
-                key={comment.id}
-                className="gap-8 rounded-xl border border-border-strong/30 bg-background p-17 shadow-sm"
-              >
-                <View className="flex-row items-center gap-8">
-                  {comment.isNew ? <View className="h-8 w-8 rounded-full bg-primary-light" /> : null}
-                  <Text weight="medium" className="text-[12px] leading-[16px] text-text-muted">
+              <View key={comment.id} className={styles.commentCard}>
+                <View className={styles.metaRow}>
+                  {comment.isNew ? <View className={styles.unreadDot} /> : null}
+                  <Text weight="medium" className={styles.metaTime}>
                     {comment.time}
                   </Text>
                 </View>
-                <Text weight="medium" className="text-[14px] leading-[22.75px] text-text-strong">
+                <Text weight="medium" className={styles.commentText}>
                   {comment.text}
                 </Text>
-                <View className="rounded-md border-l-4 border-primary-light bg-background-subtle py-12 pl-16 pr-12">
-                  <Text weight="medium" numberOfLines={1} className="text-[12px] leading-[16px] text-text">
+                <View className={styles.quoteBox}>
+                  <Text weight="medium" numberOfLines={1} className={styles.quoteText}>
                     {comment.quote}
                   </Text>
                 </View>

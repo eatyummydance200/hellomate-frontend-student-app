@@ -42,23 +42,50 @@ const MESSAGES: Message[] = [
   },
 ];
 
+const styles = {
+  container: 'flex-1 bg-background-subtle',
+  header: 'flex-row items-center justify-between border-b border-border bg-background px-[17px] pb-[13px]',
+  headerLeft: 'flex-row items-center gap-12',
+  headerName: 'text-[18px] leading-[20px]',
+  headerDept: 'pt-4 text-[13px] leading-[16px]',
+  contextBar: 'flex-row items-center justify-between border-b border-primary/10 bg-primary-light/20 px-20 py-12',
+  contextText: 'text-[15px] leading-[24px]',
+  scroll: 'flex-1',
+  scrollContent: 'gap-16 px-16 pt-16 pb-16',
+  dateChipWrap: 'items-center',
+  dateChip: 'rounded-full bg-background-muted px-12 py-4',
+  dateChipText: 'text-[10px] leading-[15px]',
+  myMessageRow: 'flex-row items-end justify-end gap-4',
+  myMessageTime: 'text-[11px] leading-[16px] text-[#3d3d3d]',
+  myBubble: 'max-w-[256px] rounded-lg bg-primary px-12 py-8',
+  bubbleText: 'leading-[21px]',
+  staffMessageGroup: 'gap-4',
+  staffAuthor: 'pl-4',
+  staffMessageRow: 'flex-row items-end gap-4',
+  staffBubble: 'max-w-[234px] rounded-lg bg-background px-12 py-8',
+  staffMetaCol: 'items-start',
+  unreadText: 'text-[11px] leading-[16px] text-primary',
+  messageTime: 'text-[11px] leading-[16px] text-[#3d3d3d]',
+  footer: 'px-20 pb-20 pt-8',
+  inputBar: 'h-[52px] w-full flex-row items-center justify-between rounded-full bg-background pl-16 pr-8 shadow-sm',
+  inputPlaceholder: 'text-[#8b8b8b]',
+  sendButton: 'h-[36px] w-[36px] items-center justify-center rounded-full bg-primary',
+} as const;
+
 export default function NoticeContactScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   return (
-    <View className="flex-1 bg-background-subtle">
-      <View
-        className="flex-row items-center justify-between border-b border-border bg-background px-[17px] pb-[13px]"
-        style={{ paddingTop: insets.top + 13 }}
-      >
-        <View className="flex-row items-center gap-12">
+    <View className={styles.container}>
+      <View className={styles.header} style={{ paddingTop: insets.top + 13 }}>
+        <View className={styles.headerLeft}>
           <Avatar size="sm" />
           <View>
-            <Text weight="semibold" color="strong" className="text-[18px] leading-[20px]">
+            <Text weight="semibold" color="strong" className={styles.headerName}>
               김하늘
             </Text>
-            <Text className="pt-4 text-[13px] leading-[16px]" color="default">
+            <Text className={styles.headerDept} color="default">
               국제교류처
             </Text>
           </View>
@@ -68,17 +95,17 @@ export default function NoticeContactScreen() {
         </Pressable>
       </View>
 
-      <Pressable className="flex-row items-center justify-between border-b border-primary/10 bg-primary-light/20 px-20 py-12">
-        <Text weight="medium" color="primary" className="text-[15px] leading-[24px]">
+      <Pressable className={styles.contextBar}>
+        <Text weight="medium" color="primary" className={styles.contextText}>
           문의 중인 공지: 건강보험 신청 안내
         </Text>
         <Image source={chevronRightSmIcon} style={{ width: 5, height: 8 }} />
       </Pressable>
 
-      <ScrollView className="flex-1" contentContainerClassName="gap-16 px-16 pt-16 pb-16">
-        <View className="items-center">
-          <View className="rounded-full bg-background-muted px-12 py-4">
-            <Text className="text-[10px] leading-[15px]" color="default">
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent}>
+        <View className={styles.dateChipWrap}>
+          <View className={styles.dateChip}>
+            <Text className={styles.dateChipText} color="default">
               2023년 10월 24일 화요일
             </Text>
           </View>
@@ -86,30 +113,28 @@ export default function NoticeContactScreen() {
 
         {MESSAGES.map((message) =>
           message.from === 'me' ? (
-            <View key={message.id} className="flex-row items-end justify-end gap-4">
-              <Text className="text-[11px] leading-[16px] text-[#3d3d3d]">{message.time}</Text>
-              <View className="max-w-[256px] rounded-lg bg-primary px-12 py-8">
-                <Text color="inverse" size="label" className="leading-[21px]">
+            <View key={message.id} className={styles.myMessageRow}>
+              <Text className={styles.myMessageTime}>{message.time}</Text>
+              <View className={styles.myBubble}>
+                <Text color="inverse" size="label" className={styles.bubbleText}>
                   {message.text}
                 </Text>
               </View>
             </View>
           ) : (
-            <View key={message.id} className="gap-4">
-              <Text size="caption" color="default" className="pl-4">
+            <View key={message.id} className={styles.staffMessageGroup}>
+              <Text size="caption" color="default" className={styles.staffAuthor}>
                 {message.author}
               </Text>
-              <View className="flex-row items-end gap-4">
-                <View className="max-w-[234px] rounded-lg bg-background px-12 py-8">
-                  <Text color="strong" size="label" className="leading-[21px]">
+              <View className={styles.staffMessageRow}>
+                <View className={styles.staffBubble}>
+                  <Text color="strong" size="label" className={styles.bubbleText}>
                     {message.text}
                   </Text>
                 </View>
-                <View className="items-start">
-                  {message.unread ? (
-                    <Text className="text-[11px] leading-[16px] text-primary">{message.unread}</Text>
-                  ) : null}
-                  <Text className="text-[11px] leading-[16px] text-[#3d3d3d]">{message.time}</Text>
+                <View className={styles.staffMetaCol}>
+                  {message.unread ? <Text className={styles.unreadText}>{message.unread}</Text> : null}
+                  <Text className={styles.messageTime}>{message.time}</Text>
                 </View>
               </View>
             </View>
@@ -117,12 +142,12 @@ export default function NoticeContactScreen() {
         )}
       </ScrollView>
 
-      <View className="px-20 pb-20 pt-8">
-        <View className="h-[52px] w-full flex-row items-center justify-between rounded-full bg-background pl-16 pr-8 shadow-sm">
-          <Text size="body" className="text-[#8b8b8b]">
+      <View className={styles.footer}>
+        <View className={styles.inputBar}>
+          <Text size="body" className={styles.inputPlaceholder}>
             메시지 보내기
           </Text>
-          <View className="h-[36px] w-[36px] items-center justify-center rounded-full bg-primary">
+          <View className={styles.sendButton}>
             <Image source={sendIcon} style={{ width: 16, height: 9 }} />
           </View>
         </View>

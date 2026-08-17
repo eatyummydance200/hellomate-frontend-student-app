@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, TextInput, View } from 'react-native';
+import { tv } from 'tailwind-variants';
 import { Text } from '@/src/components/Text';
 
 const chevronLeftIcon = require('@/assets/icons/icon-chevron-left.svg');
@@ -49,55 +50,73 @@ const NOTICES = [
   },
 ] as const;
 
+const styles = {
+  container: 'flex-1 bg-background',
+  header: 'flex-row items-center gap-10 border-b border-border bg-background px-20 py-20',
+  headerTitle: 'text-[20px] leading-[30px] text-[#3d3d3d]',
+  scroll: 'flex-1',
+  scrollContent: 'gap-16 px-16 pt-16 pb-32',
+  searchBox: 'h-40 flex-row items-center justify-between rounded-sm border border-border bg-background px-12 py-8',
+  searchInput: 'flex-1 font-sans text-label text-text',
+  filterRow: 'flex-row gap-8',
+  noticeList: 'gap-16',
+  noticeCard: 'w-full gap-10 rounded-sm bg-background p-16 shadow-sm',
+  noticeCardHeaderRow: 'flex-row items-center justify-between gap-8',
+  noticeTitle: 'flex-1 text-[15px] leading-[20px]',
+  deptBadge: 'h-24 items-center justify-center rounded-full px-8',
+  deptBadgeText: 'text-[10px] leading-[24px] text-[#1c1e1e]',
+  noticeDesc: 'text-[14px] leading-[20px] text-[#1c1e1e]',
+  dateRow: 'flex-row items-center gap-8',
+} as const;
+
+const filterPill = tv({
+  base: 'rounded-full px-16 py-4',
+  variants: {
+    active: {
+      true: 'bg-primary',
+      false: 'border border-border bg-background',
+    },
+  },
+});
+
+const filterLabel = tv({
+  base: '',
+  variants: {
+    active: {
+      true: 'text-text-inverse',
+      false: 'text-[#6f6f6f]',
+    },
+  },
+});
+
 export default function NoticeAllScreen() {
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<(typeof FILTERS)[number]>('전체');
-  const visibleNotices =
-    activeFilter === '전체' ? NOTICES : NOTICES.filter((notice) => notice.dept === activeFilter);
+  const visibleNotices = activeFilter === '전체' ? NOTICES : NOTICES.filter((notice) => notice.dept === activeFilter);
 
   return (
-    <View className="flex-1 bg-background">
-      <View className="flex-row items-center gap-10 border-b border-border bg-background px-20 py-20">
+    <View className={styles.container}>
+      <View className={styles.header}>
         <Pressable onPress={() => router.back()} hitSlop={8}>
           <Image source={chevronLeftIcon} style={{ width: 9, height: 17 }} />
         </Pressable>
-        <Text weight="semibold" className="text-[20px] leading-[30px] text-[#3d3d3d]">
+        <Text weight="semibold" className={styles.headerTitle}>
           전체 공지사항
         </Text>
       </View>
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-16 px-16 pt-16 pb-32"
-        showsVerticalScrollIndicator={false}
-      >
-        <View className="h-40 flex-row items-center justify-between rounded-sm border border-border bg-background px-12 py-8">
-          <TextInput
-            placeholder="검색어를 입력하세요"
-            placeholderTextColor="#8b8b8b"
-            className="flex-1 font-sans text-label text-text"
-          />
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <View className={styles.searchBox}>
+          <TextInput placeholder="검색어를 입력하세요" placeholderTextColor="#8b8b8b" className={styles.searchInput} />
           <Image source={searchIcon} style={{ width: 20, height: 20 }} />
         </View>
 
-        <View className="flex-row gap-8">
+        <View className={styles.filterRow}>
           {FILTERS.map((filter) => {
             const isActive = filter === activeFilter;
             return (
-              <Pressable
-                key={filter}
-                onPress={() => setActiveFilter(filter)}
-                className={
-                  isActive
-                    ? 'rounded-full bg-primary px-16 py-4'
-                    : 'rounded-full border border-border bg-background px-16 py-4'
-                }
-              >
-                <Text
-                  size="label"
-                  weight="medium"
-                  className={isActive ? 'text-text-inverse' : 'text-[#6f6f6f]'}
-                >
+              <Pressable key={filter} onPress={() => setActiveFilter(filter)} className={filterPill({ active: isActive })}>
+                <Text size="label" weight="medium" className={filterLabel({ active: isActive })}>
                   {filter}
                 </Text>
               </Pressable>
@@ -105,28 +124,25 @@ export default function NoticeAllScreen() {
           })}
         </View>
 
-        <View className="gap-16">
+        <View className={styles.noticeList}>
           {visibleNotices.map((notice) => (
             <Pressable
               key={notice.id}
-              className="w-full gap-10 rounded-sm bg-background p-16 shadow-sm"
+              className={styles.noticeCard}
               onPress={() => router.push({ pathname: '/notice/[id]', params: { id: notice.id } })}
             >
-              <View className="flex-row items-center justify-between gap-8">
-                <Text weight="medium" color="strong" className="flex-1 text-[15px] leading-[20px]">
+              <View className={styles.noticeCardHeaderRow}>
+                <Text weight="medium" color="strong" className={styles.noticeTitle}>
                   {notice.title}
                 </Text>
-                <View
-                  className="h-24 items-center justify-center rounded-full px-8"
-                  style={{ backgroundColor: notice.deptBg }}
-                >
-                  <Text className="text-[10px] leading-[24px] text-[#1c1e1e]">{notice.dept}</Text>
+                <View className={styles.deptBadge} style={{ backgroundColor: notice.deptBg }}>
+                  <Text className={styles.deptBadgeText}>{notice.dept}</Text>
                 </View>
               </View>
-              <Text numberOfLines={2} className="text-[14px] leading-[20px] text-[#1c1e1e]">
+              <Text numberOfLines={2} className={styles.noticeDesc}>
                 {notice.description}
               </Text>
-              <View className="flex-row items-center gap-8">
+              <View className={styles.dateRow}>
                 <Image source={clockIcon} style={{ width: 12, height: 13 }} />
                 <Text size="caption" weight="medium" color="muted">
                   {notice.date}

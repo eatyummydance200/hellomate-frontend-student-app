@@ -47,52 +47,66 @@ const POSTS = [
   },
 ] as const;
 
+const styles = {
+  container: 'flex-1 bg-background',
+  scroll: 'flex-1',
+  scrollContent: 'gap-16 px-16 pb-32 pt-16',
+  title: 'text-[#3d3d3d]',
+  searchBox: 'h-40 flex-row items-center justify-between rounded-sm border border-border bg-background px-12 py-8',
+  searchInput: 'flex-1 font-sans text-label text-text',
+  sortRow: 'flex-row items-center gap-4 self-start',
+  sortLabel: 'text-[13px] leading-[24px] text-text',
+  postList: 'gap-16',
+  postCard: 'w-full gap-12 rounded-lg border border-border-strong/30 bg-background p-16 shadow-sm',
+  postHeaderRow: 'flex-row items-center gap-12',
+  postMeta: 'gap-4',
+  postAuthor: 'text-[16px] leading-[24px] text-[#3d3d3d]',
+  postMetaRow: 'flex-row items-center gap-10',
+  translateLabel: 'text-[10px] leading-[24px] text-primary',
+  postContent: 'text-[14px] leading-[21px]',
+  postFooterRow: 'flex-row items-center gap-16 border-t border-border-strong/30 pt-8',
+  postStat: 'flex-row items-center gap-4',
+  writeFab: 'absolute bottom-[96px] right-20 h-[62px] w-[62px] items-center justify-center rounded-full bg-primary shadow-lg',
+} as const;
+
 export default function CommunityHomeScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={styles.container}>
       <Header onPressNotification={() => router.push('/notifications')} />
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-16 px-16 pb-32 pt-16"
-        showsVerticalScrollIndicator={false}
-      >
-        <Text size="display" weight="semibold" className="text-[#3d3d3d]">
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text size="display" weight="semibold" className={styles.title}>
           자유게시판
         </Text>
 
-        <View className="h-40 flex-row items-center justify-between rounded-sm border border-border bg-background px-12 py-8">
-          <TextInput
-            placeholder="검색어를 입력하세요"
-            placeholderTextColor="#8b8b8b"
-            className="flex-1 font-sans text-label text-text"
-          />
+        <View className={styles.searchBox}>
+          <TextInput placeholder="검색어를 입력하세요" placeholderTextColor="#8b8b8b" className={styles.searchInput} />
           <Image source={searchIcon} style={{ width: 20, height: 20 }} />
         </View>
 
-        <Pressable className="flex-row items-center gap-4 self-start">
-          <Text weight="semibold" className="text-[13px] leading-[24px] text-text">
+        <Pressable className={styles.sortRow}>
+          <Text weight="semibold" className={styles.sortLabel}>
             최신순
           </Text>
           <Image source={sortChevronIcon} style={{ width: 9, height: 4 }} />
         </Pressable>
 
-        <View className="gap-16">
+        <View className={styles.postList}>
           {POSTS.map((post) => (
             <Pressable
               key={post.id}
-              className="w-full gap-12 rounded-lg border border-border-strong/30 bg-background p-16 shadow-sm"
+              className={styles.postCard}
               onPress={() => router.push({ pathname: '/community/[id]', params: { id: post.id } })}
             >
-              <View className="flex-row items-center gap-12">
+              <View className={styles.postHeaderRow}>
                 <Image source={avatarIcon} style={{ width: 33, height: 33 }} />
-                <View className="gap-4">
-                  <Text weight="semibold" className="text-[16px] leading-[24px] text-[#3d3d3d]">
+                <View className={styles.postMeta}>
+                  <Text weight="semibold" className={styles.postAuthor}>
                     {post.author}
                   </Text>
-                  <View className="flex-row items-center gap-10">
+                  <View className={styles.postMetaRow}>
                     <Text size="caption" color="muted">
                       {post.lang}
                     </Text>
@@ -102,20 +116,20 @@ export default function CommunityHomeScreen() {
                   </View>
                 </View>
               </View>
-              <Text weight="semibold" className="text-[10px] leading-[24px] text-primary">
+              <Text weight="semibold" className={styles.translateLabel}>
                 {post.translateLabel}
               </Text>
-              <Text numberOfLines={4} color="default" className="text-[14px] leading-[21px]">
+              <Text numberOfLines={4} color="default" className={styles.postContent}>
                 {post.content}
               </Text>
-              <View className="flex-row items-center gap-16 border-t border-border-strong/30 pt-8">
-                <View className="flex-row items-center gap-4">
+              <View className={styles.postFooterRow}>
+                <View className={styles.postStat}>
                   <Image source={heartOutlineIcon} style={{ width: 14, height: 14 }} />
                   <Text size="caption" color="strong">
                     {post.likes}
                   </Text>
                 </View>
-                <View className="flex-row items-center gap-4">
+                <View className={styles.postStat}>
                   <Image source={messageIcon} style={{ width: 14, height: 14 }} />
                   <Text size="caption" color="strong">
                     {post.comments}
@@ -127,10 +141,7 @@ export default function CommunityHomeScreen() {
         </View>
       </ScrollView>
 
-      <Pressable
-        className="absolute bottom-[96px] right-20 h-[62px] w-[62px] items-center justify-center rounded-full bg-primary shadow-lg"
-        onPress={() => router.push('/community/write')}
-      >
+      <Pressable className={styles.writeFab} onPress={() => router.push('/community/write')}>
         <Image source={pencilIcon} style={{ width: 21, height: 21 }} />
       </Pressable>
 

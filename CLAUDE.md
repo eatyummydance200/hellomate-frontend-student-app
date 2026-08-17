@@ -35,6 +35,7 @@ src/
 - API 훅 네이밍: `useXxxQuery`(조회), `useXxxMutation`(변경)
 - 화면 컴포넌트 파일명: `화면이름Screen.tsx`
 - 공통 컴포넌트는 Figma 컴포넌트 목록과 1:1 매칭되도록 이름 맞추기
+- 화면 파일 내 스타일/로직 분리: 파일 상단(imports 다음, 컴포넌트 함수 앞)에 className을 모아 정의하고, JSX에서는 참조만 한다. 고정 className은 `const styles = { ... } as const` 객체로, 조건부 className은 `tailwind-variants`의 `tv()`로 정의. JSX 안에 원시 className 문자열이나 조건부 템플릿 리터럴을 직접 쓰지 않는다. (참고: [signup-basic-info.tsx](app/(auth)/signup-basic-info.tsx))
 
 ## 작업 방식 (중요)
 

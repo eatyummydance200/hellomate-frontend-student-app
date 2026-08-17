@@ -3,11 +3,40 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { tv } from 'tailwind-variants';
 import { Text } from '@/src/components/Text';
 
 const closeIcon = require('@/assets/icons/icon-close.svg');
 
 const SWITCH_TRACK = { false: '#e9efeb', true: '#006b55' };
+
+const styles = {
+  container: 'flex-1 bg-background',
+  header: 'flex-row items-center justify-between border-b border-border bg-background px-24 pb-19',
+  headerTitle: 'text-[20px] leading-[30px] text-[#3d3d3d]',
+  scroll: 'flex-1',
+  scrollContent: 'gap-24 px-24 pb-32 pt-16',
+  introText: 'text-[10px] leading-6 text-text',
+  section: 'gap-14',
+  sectionTitle: 'text-[17px] leading-[22px] text-[#3d3d3d]',
+  sectionCard: 'rounded-lg bg-background shadow-sm',
+  rowTextWrap: 'gap-4',
+  rowTitle: 'text-[15px] leading-5 text-text-strong',
+  rowDesc: 'text-[12px] leading-4 text-text',
+  systemRow: 'flex-row items-center justify-between bg-[rgba(239,245,241,0.3)] p-16',
+  systemRowTitle: 'text-[15px] leading-5 text-text-strong',
+  systemRowBadge: 'text-[10px] leading-4 text-primary',
+} as const;
+
+const toggleRow = tv({
+  base: 'flex-row items-center justify-between p-16',
+  variants: {
+    last: {
+      true: '',
+      false: 'border-b border-[rgba(188,202,195,0.3)]',
+    },
+  },
+});
 
 type ToggleRowProps = {
   title: string;
@@ -19,19 +48,13 @@ type ToggleRowProps = {
 
 function ToggleRow({ title, description, value, onChange, isLast }: ToggleRowProps) {
   return (
-    <View
-      className={
-        isLast
-          ? 'flex-row items-center justify-between p-16'
-          : 'flex-row items-center justify-between border-b border-[rgba(188,202,195,0.3)] p-16'
-      }
-    >
-      <View className="gap-4">
-        <Text weight="semibold" className="text-[15px] leading-5 text-text-strong">
+    <View className={toggleRow({ last: Boolean(isLast) })}>
+      <View className={styles.rowTextWrap}>
+        <Text weight="semibold" className={styles.rowTitle}>
           {title}
         </Text>
         {description ? (
-          <Text weight="medium" className="text-[12px] leading-4 text-text">
+          <Text weight="medium" className={styles.rowDesc}>
             {description}
           </Text>
         ) : null}
@@ -54,13 +77,10 @@ export default function NotificationSettingsScreen() {
   });
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={styles.container}>
       {/* 헤더 영역 */}
-      <View
-        className="flex-row items-center justify-between border-b border-border bg-background px-24 pb-19"
-        style={{ paddingTop: insets.top + 19 }}
-      >
-        <Text weight="semibold" className="text-[20px] leading-[30px] text-[#3d3d3d]">
+      <View className={styles.header} style={{ paddingTop: insets.top + 19 }}>
+        <Text weight="semibold" className={styles.headerTitle}>
           알림 설정
         </Text>
         <Pressable onPress={() => router.back()} hitSlop={8}>
@@ -68,21 +88,17 @@ export default function NotificationSettingsScreen() {
         </Pressable>
       </View>
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-24 px-24 pb-32 pt-16"
-        showsVerticalScrollIndicator={false}
-      >
-        <Text weight="medium" className="text-[10px] leading-6 text-text">
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text weight="medium" className={styles.introText}>
           {'HelloMate의 소식을 실시간으로 받아보세요. 각 카테고리별로 알림 수신 여부를 개별적으로 설정할 수 있습니다.'}
         </Text>
 
         {/* 채팅 알림 영역 */}
-        <View className="gap-14">
-          <Text weight="semibold" className="text-[17px] leading-[22px] text-[#3d3d3d]">
+        <View className={styles.section}>
+          <Text weight="semibold" className={styles.sectionTitle}>
             채팅 알림
           </Text>
-          <View className="rounded-lg bg-background shadow-sm">
+          <View className={styles.sectionCard}>
             <ToggleRow
               title="담당자 1:1 채팅"
               description="문의 및 상담 메시지 알림"
@@ -100,11 +116,11 @@ export default function NotificationSettingsScreen() {
         </View>
 
         {/* 서비스 알림 영역 */}
-        <View className="gap-14">
-          <Text weight="semibold" className="text-[17px] leading-[22px] text-[#3d3d3d]">
+        <View className={styles.section}>
+          <Text weight="semibold" className={styles.sectionTitle}>
             서비스 알림
           </Text>
-          <View className="rounded-lg bg-background shadow-sm">
+          <View className={styles.sectionCard}>
             <ToggleRow
               title="공지사항"
               value={prefs.notice}
@@ -125,12 +141,12 @@ export default function NotificationSettingsScreen() {
               value={prefs.lifeInfo}
               onChange={(next) => setPrefs((prev) => ({ ...prev, lifeInfo: next }))}
             />
-            <View className="flex-row items-center justify-between bg-[rgba(239,245,241,0.3)] p-16">
-              <View className="gap-4">
-                <Text weight="semibold" className="text-[15px] leading-5 text-text-strong">
+            <View className={styles.systemRow}>
+              <View className={styles.rowTextWrap}>
+                <Text weight="semibold" className={styles.systemRowTitle}>
                   시스템 안내
                 </Text>
-                <Text weight="medium" className="text-[10px] leading-4 text-primary">
+                <Text weight="medium" className={styles.systemRowBadge}>
                   필수 수신 알림
                 </Text>
               </View>

@@ -25,44 +25,60 @@ const COMMUNITY_MENU: MenuRow[] = [
   { label: '내가 작성한 댓글', route: '/mypage/comments' },
 ];
 
+const styles = {
+  container: 'flex-1 bg-background',
+  scroll: 'flex-1',
+  scrollContent: 'pb-32',
+  profileRow: 'flex-row items-center gap-12 px-20 py-16',
+  profileName: 'text-[16px] leading-[1.5] text-[#3d3d3d]',
+  divider: 'h-px bg-border',
+  sectionDivider: 'my-8 h-px bg-border',
+  accountSection: 'px-16 pt-16',
+  communitySection: 'px-16',
+  sectionTitle: 'pb-8 text-[16px] leading-[1.5] text-[#3d3d3d]',
+  menuRow: 'flex-row items-center justify-between py-8',
+  menuRowSimple: 'py-8',
+  menuLabel: 'text-[16px] leading-[1.6] text-[#3d3d3d]',
+  menuBadge: 'rounded-full bg-primary-light/10 px-8 py-2',
+  menuBadgeText: 'text-[12px] leading-[16px] text-primary',
+  logoutRow: 'px-16 py-8',
+  logoutLabel: 'text-[16px] leading-[1.6] text-danger',
+} as const;
+
 export default function MyPageScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={styles.container}>
       <Header onPressNotification={() => router.push('/notifications')} />
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="pb-32"
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView className={styles.scroll} contentContainerClassName={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* 프로필 영역 */}
-        <View className="flex-row items-center gap-12 px-20 py-16">
+        <View className={styles.profileRow}>
           <Avatar size="lg" />
-          <Text weight="semibold" className="text-[16px] leading-[1.5] text-[#3d3d3d]">
+          <Text weight="semibold" className={styles.profileName}>
             {USER_NAME}
           </Text>
         </View>
 
-        <View className="h-px bg-border" />
+        <View className={styles.divider} />
 
         {/* 계정 관리 섹션 */}
-        <View className="px-16 pt-16">
-          <Text weight="semibold" className="pb-8 text-[16px] leading-[1.5] text-[#3d3d3d]">
+        <View className={styles.accountSection}>
+          <Text weight="semibold" className={styles.sectionTitle}>
             계정 관리
           </Text>
           {ACCOUNT_MENU.map((item) => (
             <Pressable
               key={item.label}
-              className="flex-row items-center justify-between py-8"
+              className={styles.menuRow}
               disabled={!item.route}
               onPress={item.route ? () => router.push(item.route!) : undefined}
             >
-              <Text className="text-[16px] leading-[1.6] text-[#3d3d3d]">{item.label}</Text>
+              <Text className={styles.menuLabel}>{item.label}</Text>
               {item.badge ? (
-                <View className="rounded-full bg-primary-light/10 px-8 py-2">
-                  <Text weight="medium" className="text-[12px] leading-[16px] text-primary">
+                <View className={styles.menuBadge}>
+                  <Text weight="medium" className={styles.menuBadgeText}>
                     {item.badge}
                   </Text>
                 </View>
@@ -71,29 +87,25 @@ export default function MyPageScreen() {
           ))}
         </View>
 
-        <View className="my-8 h-px bg-border" />
+        <View className={styles.sectionDivider} />
 
         {/* 커뮤니티 섹션 */}
-        <View className="px-16">
-          <Text weight="semibold" className="pb-8 text-[16px] leading-[1.5] text-[#3d3d3d]">
+        <View className={styles.communitySection}>
+          <Text weight="semibold" className={styles.sectionTitle}>
             커뮤니티
           </Text>
           {COMMUNITY_MENU.map((item) => (
-            <Pressable
-              key={item.label}
-              className="py-8"
-              onPress={() => router.push(item.route!)}
-            >
-              <Text className="text-[16px] leading-[1.6] text-[#3d3d3d]">{item.label}</Text>
+            <Pressable key={item.label} className={styles.menuRowSimple} onPress={() => router.push(item.route!)}>
+              <Text className={styles.menuLabel}>{item.label}</Text>
             </Pressable>
           ))}
         </View>
 
-        <View className="my-8 h-px bg-border" />
+        <View className={styles.sectionDivider} />
 
         {/* 로그아웃 */}
-        <Pressable className="px-16 py-8" onPress={() => router.replace('/(auth)')}>
-          <Text className="text-[16px] leading-[1.6] text-danger">로그아웃</Text>
+        <Pressable className={styles.logoutRow} onPress={() => router.replace('/(auth)')}>
+          <Text className={styles.logoutLabel}>로그아웃</Text>
         </Pressable>
       </ScrollView>
 
